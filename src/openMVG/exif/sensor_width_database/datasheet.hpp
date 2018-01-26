@@ -41,6 +41,7 @@ struct Datasheet
     // - we ensure that DIGIT based substring have a match
 
     std::string this_model = model_;
+
     std::transform(this_model.begin(), this_model.end(), this_model.begin(), ::tolower);
     std::string rhs_model = rhs.model_;
     std::transform(rhs_model.begin(), rhs_model.end(), rhs_model.begin(), ::tolower);
@@ -51,7 +52,9 @@ struct Datasheet
     std::string rhs_maker( rhs_model );
     rhs_maker = rhs_maker.substr( 0, rhs_maker.find( ' ' ) );
 
-    if (this_maker.compare(rhs_maker) == 0)
+	std::vector<std::string> vec_maker;
+	stl::split(rhs_model, ' ', vec_maker);
+    if (this_maker.compare(rhs_maker) == 0 || vec_maker.size() == 1)
     {
       // Extract digit substring from database entry
       std::vector<std::string> vec_db_model;
@@ -67,7 +70,6 @@ struct Datasheet
       }
 
       // Search for digit substring in image camera model and if there is a match
-
       const bool has_digit =
         std::find_if(rhs_model.begin(), rhs_model.end(), isdigit) != rhs_model.end();
       if (!has_digit || db_model_digit_substring.empty() )

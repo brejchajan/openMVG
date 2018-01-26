@@ -356,7 +356,14 @@ int main(int argc, char **argv)
           error_report_stream
             << stlplus::basename_part(sImageFilename)
             << "\" model \"" << sCamModel << "\" doesn't exist in the database" << "\n"
-            << "Please consider add your camera model and sensor width in the database." << "\n";
+            << "Using default focal estimate." << "\n";
+            //<< "Please consider add your camera model and sensor width in the database." << "\n";
+
+           //As we need to reconstruct as much as possible (we cannot afford
+           //throwing photos away) we use the default estimate (similar to
+           //VisualSfM.
+           focal = std::max ( width, height ) * 1.2;
+
         }
       }
     }
